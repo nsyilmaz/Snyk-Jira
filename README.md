@@ -1,1 +1,1 @@
-# security-snyk-jira-issue-sync-aux
+# Repository used to syncing Snyk and Jira
