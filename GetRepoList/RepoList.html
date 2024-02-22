@@ -1,0 +1,104 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="config.js"></script> 
+
+
+<script>
+
+// githupAuthToken defined in config.js
+
+
+var handleError = function (err) {
+    alert("Error!!!");
+    //console.warn(err);
+    document.write(err);
+
+};
+
+(async () => {
+
+    document.write("Fetching repositories...");
+    
+    page = 1
+    i=0;
+    var resp="Count;Visibility;URL;Size;Language;Updated;Archived<br>";
+    
+    while (page) {
+
+        const res = await fetch(`https://api.github.com/orgs/company/repos?per_page=100&page=` + page, {
+            method: 'GET',
+            withCredentials: true,
+            //credentials: 'include',
+            headers: {
+                Authorization: githupAuthToken,
+            }
+        });
+
+        const status = await res.status;
+        if(status >= 400 && status < 600){ 
+          const body = await res.json();
+          const message = `An error occured: ${res.status} <br> ${JSON.stringify(body)}`;
+          throw new Error(message);
+        }
+
+        const json = await res.json();
+        
+        if (json.length<100) {
+            page = 0;
+        } else {
+            page++;
+        }
+
+        //document.write(JSON.stringify(json));
+        await $.each(json, function (index, value) {
+            resp = resp + ++i +';'+ value["visibility"] + ";" + value["html_url"] + ';'+value["size"] +';'+ value["language"] +';'+ value["updated_at"] +';'+ value["archived"] + "<br>";
+            
+        });
+        
+    }
+    document.write(resp);
+
+})().catch(handleError);
+
+
+
+/*
+
+// Here we have async problem.
+
+  $.ajaxSetup({
+    headers: {
+      //Authorization: "token XXXXXXXXXXXXX",
+    },
+  });
+
+  let page = 1;
+  
+  while (page) {
+    
+    $.getJSON("https://api.github.com/orgs/company/repos?per_page=10&page=" + page, function (json) {
+        alert(json.length);
+        if (json.length < 10) {
+            alert("end");
+          page = 0;
+        }
+
+        var resp = "";
+        let i = 0;
+        //document.write(json.length);
+
+        $.each(json, function (index, value) {
+          resp = resp + value["visibility"] + ";" + value["html_url"] + "<br>";
+          //console.log(resp);
+          //document.write(resp);
+        });
+
+        document.write(resp);
+        //console.log(resp);
+
+      }
+    );
+    page++;
+    
+  }
+*/
+</script>
