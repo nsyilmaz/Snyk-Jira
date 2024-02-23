@@ -3,7 +3,7 @@
 $DEBUG = 0;
 $JiraApiToken="XXXXXXX"; // Put your Jira Api Token.
 $SnykApiToken = "XXXXX"; // Put your Snyk Api Token.
-$DividoOrgID = "XXXXXX";  // Put Org ID from Snyk.
+$CompOrgID = "XXXXXX";  // Put Org ID from Snyk.
 
 /* 
     If API token fails, this is a workaround for session. It can be obtained from jira web session from developer tools. 
